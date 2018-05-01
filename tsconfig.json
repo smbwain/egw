@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "target": "es2016",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "include": ["src/*"]
+    }
+  }
+}

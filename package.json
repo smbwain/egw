@@ -1,0 +1,38 @@
+{
+  "name": "egw",
+  "version": "0.0.1",
+  "description": "Lightweight server framework to build project structure with async-initializing modules",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "egw": "dist/bin/egw.js"
+  },
+  "scripts": {
+    "test": "mocha dist/tests",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smbwain/eagle-wings.git"
+  },
+  "keywords": [
+    "server",
+    "framework"
+  ],
+  "author": "Roman Ditchuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smbwain/eagle-wings/issues"
+  },
+  "homepage": "https://github.com/smbwain/eagle-wings#readme",
+  "dependencies": {
+    "js-yaml": "^3.11.0",
+    "msv-config": "^1.0.0",
+    "msv-logger": "^0.0.4",
+    "source-map-support": "^0.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.0",
+    "typescript": "^2.8.3"
+  }
+}
