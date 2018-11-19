@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 
-import { basicConfig } from 'msv-config';
 import { join } from 'path';
 
 import { App } from '../index';
@@ -12,15 +11,13 @@ if (!scriptName) {
     throw new Error('No script name');
 }
 
-const config = basicConfig();
-const app = new App({ config });
+const app = new App({});
 (async () => {
     try {
-        await app.init();
         await require(join(process.cwd(), './dist/scripts/', scriptName)).default(app);
     } catch (err) {
         app.logger.error(err);
-        app.unload();
+        await app.unload();
         return;
     }
     if (app.serviceMode) {
