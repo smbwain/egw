@@ -9,18 +9,30 @@ export type PartialConfigTree<Config extends ConfigTree> = {
         : string
 };
 
-export function copyConfig<Config extends ConfigTree>(source: Config): Config {
-    const target: any = {};
+export function mergeConfig(
+    target: ConfigTree,
+    source: ConfigTree,
+) {
     for (const key in source) {
         if (source.hasOwnProperty(key)) {
-            if (typeof source[key] === 'string') {
-                target[key] = source[key];
-            } else {
-                target[key] = copyConfig(source[key] as ConfigTree);
+            if (key in target) {
+                if (typeof source[key] !== typeof target[key]) {
+                    throw new Error(`Config type mismatch on property "${key}"`);
+                }
+                if (typeof source[key] === 'object') {
+                    mergeConfig(target[key] as ConfigTree, source[key] as ConfigTree);
+                    continue;
+                }
             }
+            target[key] = source[key];
         }
     }
-    return target;
+}
+
+export function copyConfig<Config extends ConfigTree>(source: Config): Config {
+    const target = {};
+    mergeConfig(target, source);
+    return target as Config;
 }
 
 export const fillConfig = (target: ConfigTree, source: ConfigTree) => {

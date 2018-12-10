@@ -3,47 +3,31 @@ import 'source-map-support/register';
 
 import { join } from 'path';
 
-import { App } from '../index';
+import { createRootContext } from '../index';
+import { _logger } from '../helpers/logger';
 
 const scriptName = process.argv[2];
+let functionName = process.argv[3];
 
 if (!scriptName) {
     throw new Error('No script name');
 }
 
-const app = new App({});
+const ctx = createRootContext();
 (async () => {
     try {
-        await require(join(process.cwd(), './dist/scripts/', scriptName)).default(app);
-    } catch (err) {
-        app.logger.error(err);
-        await app.unload();
-        return;
-    }
-    if (app.serviceMode) {
-        app.logger.log('Service mode: on');
-
-        let closing = false;
-        async function term(code?: string) {
-            if (closing) {
-                return;
+        const mods = require(join(process.cwd(), scriptName));
+        if (!functionName) {
+            if (Object.keys(mods).length === 1) {
+                functionName = Object.keys(mods)[0];
+            } else {
+                throw new Error('Specify name of exported method you want to run');
             }
-            closing = true;
-            try {
-                if (code) {
-                    app.logger.log(`Signal ${code} has been caught`);
-                }
-                await app.unload();
-            } catch (err) {
-                app.logger.error(err);
-            }
-            process.exit();
+            await mods[functionName](ctx);
         }
-
-        process
-            .on('SIGINT', term.bind(null, 'SIGINT'))
-            .on('SIGTERM', term.bind(null, 'SIGTERM'));
-    } else {
-        await app.unload();
+    } catch (err) {
+        _logger(ctx).error(err);
+    } finally {
+        await ctx.destroy();
     }
 })();
