@@ -13,9 +13,9 @@ export const _config = <C extends ConfigTree>(ctx: Context, defaultConfig: C): C
     const config = copyConfig(defaultConfig);
     if (ctx[symbol]) {
         fillConfig(config, ctx[symbol]);
-    }
-    if (typeof config.envPrefix === 'string') {
-        fillConfigEnv(config, config.envPrefix);
+        if (typeof ctx[symbol].envPrefix === 'string') {
+            fillConfigEnv(config, ctx[symbol].envPrefix);
+        }
     }
     return config;
 };
