@@ -10,7 +10,7 @@ export const contextExpressMiddleware = (
     const logger = _logger(ctx);
     return (req, res, next) => {
         const subContext = ctx.sub();
-        applier(req, ctx);
+        applier(req, subContext);
         req.on('end', () => {
             subContext.destroy().catch((err) => {
                 logger.error('Error on destroying context on request end', err);
