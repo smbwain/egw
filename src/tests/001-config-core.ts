@@ -1,5 +1,4 @@
-
-import {mergeConfig, fillConfigEnv, fillConfig} from '../config/index';
+import { fillConfig, fillConfigEnv, mergeConfig } from '../config/index';
 
 describe('config core', () => {
     it('should merge config', () => {
@@ -12,7 +11,7 @@ describe('config core', () => {
             },
             f: {
                 g: '555',
-            }
+            },
         };
         mergeConfig(target, {
             a: '666',
@@ -21,7 +20,7 @@ describe('config core', () => {
                 i: '888',
             },
             j: {
-                k: '999'
+                k: '999',
             },
             l: '000',
         });
@@ -35,7 +34,7 @@ describe('config core', () => {
             c: {
                 d: '333',
                 e: '444',
-            }
+            },
         };
         fillConfig(target, {
             a: '555',

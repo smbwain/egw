@@ -1,10 +1,10 @@
-import { Context } from '../subscontext';
-import { _logger } from './helpers/logger';
+import { Context } from './core/subscontext';
+import { _logger } from './helpers';
 
 export const contextExpressMiddleware = (
     ctx: Context,
-    applier: (req, ctx) => void = (req, ctx) => {
-        req.ctx = ctx;
+    applier: (req, ctx) => void = (req, context) => {
+        req.ctx = context;
     },
 ) => {
     const logger = _logger(ctx);

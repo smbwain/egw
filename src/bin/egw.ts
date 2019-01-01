@@ -3,8 +3,8 @@ import 'source-map-support/register';
 
 import { join } from 'path';
 
-import { createRootContext } from '../index';
 import { _logger } from '../helpers/logger';
+import { createRootContext } from '../index';
 
 const scriptName = process.argv[2];
 let functionName = process.argv[3];

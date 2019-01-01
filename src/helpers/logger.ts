@@ -1,5 +1,5 @@
-import { Context } from '..';
 import { Logger, logger as createLogger, Params } from 'msv-logger';
+import { Context } from '..';
 
 const symbol = Symbol();
 

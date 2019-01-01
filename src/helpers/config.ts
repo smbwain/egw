@@ -1,5 +1,5 @@
-import { ConfigTree, copyConfig, fillConfig, fillConfigEnv, mergeConfig } from '../config/index';
-import { Context } from '../../subscontext/index';
+import { ConfigTree, copyConfig, fillConfig, fillConfigEnv, mergeConfig } from '../config';
+import { Context } from '../core/subscontext';
 
 const symbol = Symbol();
 
