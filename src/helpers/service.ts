@@ -1,7 +1,7 @@
 import {_logger} from './logger';
-import {singleton} from './wrappers';
+import {mod} from './wrappers';
 
-export const _runAsService = singleton((ctx) => {
+export const _runAsService = mod((ctx) => {
     const logger = _logger(ctx).sub({tag: 'service'});
     const destroy = ctx.destroy.bind(ctx);
     const interrupted = new Promise((resolve) => {

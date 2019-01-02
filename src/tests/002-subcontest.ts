@@ -1,12 +1,12 @@
 
-import { Context, createRootContext, singleton } from '..';
+import { Context, createRootContext, mod } from '..';
 
 describe('subcontest', () => {
     describe('mod', () => {
         it('init/destroy on context and subcontext', async () => {
             const initFn = jest.fn();
             const deinitFn = jest.fn();
-            const _mod = singleton((context: Context) => {
+            const _mod = mod((context: Context) => {
                 initFn();
                 context.addDestroyHook(deinitFn);
                 return 5;
@@ -37,7 +37,7 @@ describe('subcontest', () => {
         it('init/destroy on subcontext', async () => {
             const initFn = jest.fn();
             const deinitFn = jest.fn();
-            const _mod = singleton((context: Context) => {
+            const _mod = mod((context: Context) => {
                 initFn();
                 context.addDestroyHook(deinitFn);
                 return 5;

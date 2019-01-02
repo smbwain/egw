@@ -42,7 +42,7 @@ export const dataAsyncInit = <T, A extends any[]>(
     };
 };
 
-export const singleton = <T>(handler: (ctx: Context) => T): ((ctx: Context) => T) => {
+export const mod = <T>(handler: (ctx: Context) => T): ((ctx: Context) => T) => {
     const symbol = Symbol();
     return (ctx) => (symbol in ctx) ? ctx[symbol] : (ctx[symbol] = handler(ctx));
 };

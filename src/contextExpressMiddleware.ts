@@ -1,5 +1,5 @@
 import { Context } from './core/subscontext';
-import { _logger } from './helpers';
+import { _logger, _setTime } from './helpers';
 
 export const contextExpressMiddleware = (
     ctx: Context,
@@ -10,6 +10,7 @@ export const contextExpressMiddleware = (
     const logger = _logger(ctx);
     return (req, res, next) => {
         const subContext = ctx.sub();
+        _setTime(subContext);
         applier(req, subContext);
         req.on('end', () => {
             subContext.destroy().catch((err) => {

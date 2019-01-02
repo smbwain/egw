@@ -2,8 +2,7 @@
 import 'source-map-support/register';
 
 import { join } from 'path';
-
-import { _logger } from '../helpers/logger';
+import { _logger, _setTime } from '../helpers';
 import { createRootContext } from '../index';
 
 const scriptName = process.argv[2];
@@ -14,6 +13,7 @@ if (!scriptName) {
 }
 
 const ctx = createRootContext();
+_setTime(ctx);
 (async () => {
     try {
         const mods = require(join(process.cwd(), scriptName));
