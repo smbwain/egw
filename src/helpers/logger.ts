@@ -1,13 +1,11 @@
 import { Logger, logger as createLogger, Params } from 'msv-logger';
-import { Context } from '..';
 
-const symbol = Symbol();
+import {Context} from '../core/subscontext';
+import {data} from './wrappers';
 
-export const _setLogger = (ctx: Context, params: Params) => {
-    const parentLogger: Logger = ctx.parent && ctx.parent[symbol];
-    ctx[symbol] = parentLogger ? parentLogger.sub(params) : createLogger(params);
+const [_logger, _set] = data<Logger>(createLogger({}));
+
+export {
+    _logger,
 };
-
-export const _logger = (ctx: Context): Logger => {
-    return ctx[symbol] || createLogger({});
-};
+export const _setLogger = (ctx: Context, params: Params) => _set(ctx, (prevLogger) => prevLogger.sub(params));

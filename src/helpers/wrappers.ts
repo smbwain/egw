@@ -1,10 +1,14 @@
 import { Context } from '../core/subscontext';
 
-export const data = <T>(defaultValue?: T) => {
+export const data = <T>(
+    defaultValue?: T,
+): [
+    (ctx: Context) => T,
+    (ctx: Context, value: T | ((prevValue?: T) => T)) => T
+] => {
     const symbol = Symbol();
-    return {
-        _set: (ctx: Context, value: T): T => ctx[symbol] = value,
-        _get: (ctx: Context): T => {
+    return [
+        (ctx) => {
             if (symbol in ctx) {
                 return ctx[symbol];
             }
@@ -13,36 +17,59 @@ export const data = <T>(defaultValue?: T) => {
             }
             return defaultValue;
         },
-    };
+        (ctx, value) => {
+            if (typeof value === 'function') {
+                value = (value as (parentValue?: T) => T)((symbol in ctx) ? ctx[symbol] : defaultValue);
+            }
+            ctx[symbol] = value;
+            return value as T;
+        },
+    ];
 };
 
-export const dataInit = <T, A extends any[]>(
+// export const getSet = <T extends object, GetArgs extends any[], SetArgs extends any[]>(
+//     getter: (ctx: Context, symbol: symbol, ...getArgs: GetArgs) => T,
+//     setter: (ctx: Context, symbol: symbol, ...setArgs: SetArgs) => T,
+// ) : [
+//     (ctx: Context, ...getArgs: GetArgs) => T,
+//     (ctx: Context, ...setArgs: SetArgs) => T
+// ] => {
+//     const symbol = Symbol();
+//     return [
+//         (ctx, ...args) => getter(ctx, symbol, ...args),
+//         (ctx, ...args) => setter(ctx, symbol, ...args),
+//     ];
+// };
+
+export const dataInit = <T extends object, A extends any[]>(
     handler: (ctx: Context, ...args: A) => T,
     defaultValue?: T,
-) => {
-    const {_set, _get} = data<T>(defaultValue);
-    return {
+): [
+    (ctx: Context) => T,
+    (ctx: Context, ...args: A) => T
+] => {
+    const [_get, _set] = data<T>(defaultValue);
+    return [
         _get,
-        _init: (ctx: Context, ...args: A): T => {
-            return _set(ctx, handler(ctx, ...args));
-        },
-    };
+        (ctx, ...args) => _set(ctx, handler(ctx, ...args)),
+    ];
 };
 
-export const dataAsyncInit = <T, A extends any[]>(
+export const dataAsyncInit = <T extends object, A extends any[]>(
     handler: (ctx: Context, ...args: A) => Promise<T>,
     defaultValue?: T,
-) => {
-    const {_set, _get} = data<T>(defaultValue);
-    return {
+): [
+    (ctx: Context) => T,
+    (ctx: Context, ...args: A) => Promise<T>
+] => {
+    const [_get, _set] = data<T>(defaultValue);
+    return [
         _get,
-        _init: async (ctx: Context, ...args: A): Promise<T> => {
-            return _set(ctx, await handler(ctx, ...args));
-        },
-    };
+        async (ctx, ...args) => _set(ctx, await handler(ctx, ...args)),
+    ];
 };
 
-export const mod = <T>(handler: (ctx: Context) => T): ((ctx: Context) => T) => {
+export const singleton = <T>(handler: (ctx: Context) => T): ((ctx: Context) => T) => {
     const symbol = Symbol();
     return (ctx) => (symbol in ctx) ? ctx[symbol] : (ctx[symbol] = handler(ctx));
 };
