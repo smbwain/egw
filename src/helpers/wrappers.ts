@@ -27,21 +27,7 @@ export const data = <T>(
     ];
 };
 
-// export const getSet = <T extends object, GetArgs extends any[], SetArgs extends any[]>(
-//     getter: (ctx: Context, symbol: symbol, ...getArgs: GetArgs) => T,
-//     setter: (ctx: Context, symbol: symbol, ...setArgs: SetArgs) => T,
-// ) : [
-//     (ctx: Context, ...getArgs: GetArgs) => T,
-//     (ctx: Context, ...setArgs: SetArgs) => T
-// ] => {
-//     const symbol = Symbol();
-//     return [
-//         (ctx, ...args) => getter(ctx, symbol, ...args),
-//         (ctx, ...args) => setter(ctx, symbol, ...args),
-//     ];
-// };
-
-export const dataInit = <T extends object, A extends any[]>(
+export const syncInitializer = <T extends object, A extends any[]>(
     handler: (ctx: Context, ...args: A) => T,
     defaultValue?: T,
 ): [
@@ -55,7 +41,7 @@ export const dataInit = <T extends object, A extends any[]>(
     ];
 };
 
-export const dataAsyncInit = <T extends object, A extends any[]>(
+export const asyncInitializer = <T extends object, A extends any[]>(
     handler: (ctx: Context, ...args: A) => Promise<T>,
     defaultValue?: T,
 ): [

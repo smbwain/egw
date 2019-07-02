@@ -1,3 +1,3 @@
 export * from './core/subscontext';
 export * from './helpers';
-export {contextExpressMiddleware} from './contextExpressMiddleware';
+export {contextExpressMiddleware} from './helpers/contextExpressMiddleware';

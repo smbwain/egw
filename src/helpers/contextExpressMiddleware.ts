@@ -1,9 +1,9 @@
-import { Context } from './core/subscontext';
-import { _logger, _setTime } from './helpers';
+import { Context } from '../core/subscontext';
+import { _logger, _setTime } from './index';
 
 export const contextExpressMiddleware = (
     ctx: Context,
-    applier: (req, ctx) => void = (req, context) => {
+    setter: (req, ctx) => void = (req, context) => {
         req.ctx = context;
     },
 ) => {
@@ -11,7 +11,7 @@ export const contextExpressMiddleware = (
     return (req, res, next) => {
         const subContext = ctx.sub();
         _setTime(subContext);
-        applier(req, subContext);
+        setter(req, subContext);
         req.on('end', () => {
             subContext.destroy().catch((err) => {
                 logger.error('Error on destroying context on request end', err);
