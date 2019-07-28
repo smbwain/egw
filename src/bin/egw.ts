@@ -16,15 +16,15 @@ const ctx = createRootContext();
 _setTime(ctx);
 (async () => {
     try {
-        const plugins = require(join(process.cwd(), scriptName));
+        const exported = require(join(process.cwd(), scriptName));
         if (!functionName) {
-            if (Object.keys(plugins).length === 1) {
-                functionName = Object.keys(plugins)[0];
+            if (Object.keys(exported).length === 1) {
+                functionName = Object.keys(exported)[0];
             } else {
                 throw new Error('Specify name of exported method you want to run');
             }
         }
-        await plugins[functionName](ctx);
+        await exported[functionName](ctx);
     } catch (err) {
         _logger(ctx).error(err);
     } finally {
